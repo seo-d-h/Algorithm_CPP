@@ -2,7 +2,10 @@
 using namespace std;
 
 int main(){
-    int a,b;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    
+    long long a,b;
     cin >> a >> b;
     cout << (a+b)*(a-b);
 }
