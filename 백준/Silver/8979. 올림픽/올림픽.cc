@@ -4,7 +4,10 @@
 using namespace std;
 
 bool cmp(const vector<int>& a, const vector<int>& b){
-    if(a[1] == b[1] && a[2] == b[2]){
+    if(a[1] == b[1] && a[2] == b[2] && a[3] == b[3]){
+        return a[0] < b[0];
+    }
+    else if(a[1] == b[1] && a[2] == b[2]){
         return a[3] > b[3];
     }
     else if(a[1] == b[1]){
@@ -16,10 +19,10 @@ bool cmp(const vector<int>& a, const vector<int>& b){
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
-    
+
     int N, K;
     cin >> N >> K;
-    vector<vector<int>> ary(N+1, vector<int>(4));
+    vector<vector<int>> ary(N+1, vector<int>(5));
     int trial = N;
     //int ary[N+1][4];
 
@@ -34,36 +37,29 @@ int main(){
 
     sort(ary.begin(), ary.end(), cmp);
     vector<int> res;
-    int cnt = 1;
-    bool flag = 0;
-    for(int i=0;i<N;i++){
-        if(ary[i][1] == ary[i+1][1] && ary[i][2] == ary[i+1][2] && ary[i][3] == ary[i+1][3]){
-            if(flag){
-                res.push_back(res.back());
-            }
-            else{
-                res.push_back(cnt);
-                flag = 1;
-            }
-            
+    res.resize(N);
+    int rank = 1;
+    ary[0][4] = 1;
+
+    for(int i=1;i<N;i++){
+        if(ary[i][1] == ary[i-1][1] && ary[i][2] == ary[i-1][2] && ary[i][3] == ary[i-1][3]){
+            ary[i][4] = ary[i-1][4];
         }
         else{
-            res.push_back(cnt);
-            cnt++;
-            flag = 0;
+            rank = i+1;
+            ary[i][4] = rank;
         }
     }
 
     // for(int i=0;i<N;i++){
-    //     for(int j=0;j<4;j++){
+    //     for(int j=0;j<5;j++){
     //         cout << ary[i][j] << " ";
     //     }
     //     cout << endl;
     // }
 
-    // for(int a : res){
-    //     cout << a << " ";
-    // }
 
-    cout << res[K-1];
+    for(int i=0;i<N;i++){
+        if(ary[i][0] == K) cout << ary[i][4];
+    }
 }
