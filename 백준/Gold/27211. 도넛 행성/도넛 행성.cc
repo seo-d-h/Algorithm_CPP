@@ -1,11 +1,8 @@
 #include <iostream>
 #include <queue>
-#include <memory.h>
 using namespace std;
-#define X first
-#define Y second
 
-int n, m;
+int N, M, cnt=0;
 int board[1002][1002];
 int visited[1002][1002];
 int dx[4] = {1,0,-1,0};
@@ -14,28 +11,29 @@ int dy[4] = {0,1,0,-1};
 void BFS(int x, int y){
     queue<pair<int,int>> Q;
     Q.push({x,y});
-    visited[x][y] = 1;
     while(!Q.empty()){
-        auto cur = Q.front();
+        int cur_x = Q.front().first;
+        int cur_y = Q.front().second;
+        //cout << cur_x << " " << cur_y << endl;
         Q.pop();
         for(int dir=0;dir<4;dir++){
-            int nx = cur.X + dx[dir];
-            int ny = cur.Y + dy[dir];
+            int nx = cur_x + dx[dir];
+            int ny = cur_y + dy[dir];
             if(nx < 0){
-                nx = n-1;
+                nx = N-1;
             }
-            if(nx >= n){
+            if(nx >= N){
                 nx = 0;
             }
             if(ny < 0){
-                ny = m-1;
+                ny = M-1;
             }
-            if(ny >= m){
+            if(ny >= M){
                 ny = 0;
             }
-            if(visited[nx][ny] >= 2|| board[nx][ny] == 1) continue;
-            visited[nx][ny]++;
+            if(visited[nx][ny] || board[nx][ny] == 1) continue;
             Q.push({nx,ny});
+            visited[nx][ny] = 1;
         }
     }
 }
@@ -43,30 +41,22 @@ void BFS(int x, int y){
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
-
-    int cnt = 0;
-    cin >> n >> m;
-
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            cin >> board[i][j];
+    
+    int num;
+    cin >> N >> M;
+    for(int i=0;i<N;i++){
+        for(int j=0;j<M;j++){
+            cin >> num;
+            board[i][j] = num;
         }
     }
-    memset(visited, 0, sizeof(visited));
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
+
+    for(int i=0;i<N;i++){
+        for(int j=0;j<M;j++){
             if(visited[i][j] || board[i][j] == 1) continue;
             BFS(i,j);
-            //cout << i << " " << j << endl;
             cnt++;
         }
     }
-
-    // for(int i=0;i<n;i++){
-    //     for(int j=0;j<m;j++){
-    //         cout << visited[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
     cout << cnt;
 }
