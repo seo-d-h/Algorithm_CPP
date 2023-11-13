@@ -11,7 +11,7 @@ int main(int argc, char** argv)
   
   int N, a, b;
   int res=0;
-  int ary[12];
+  int ary[11];
   memset(ary, -1, sizeof(ary));
   cin >> N;
   while(N--){
