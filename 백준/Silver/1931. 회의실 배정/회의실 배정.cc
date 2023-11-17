@@ -1,33 +1,39 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<vector>
+#include<algorithm>
 using namespace std;
 
-bool cmp(const pair<int,int>& a, const pair<int,int>& b){
-    if(a.first == b.first) return a.second < b.second;
+bool cmp(const pair<int,int>& a , const pair<int,int>& b){
+  if(a.second == b.second){
     return a.first < b.first;
+  }
+  return a.second < b.second;
 }
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-    int N, start, end, res = 1;
-    vector<pair<int,int>> vec;
-    cin >> N;
-    for(int i=0;i<N;i++){
-        cin >> start >> end;
-        vec.push_back({end, start});
+int main(int argc, char** argv)
+{
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  
+  int N, a, b;
+  int res=1;
+  vector<pair<int,int>> room;
+  cin >> N;
+  for(int i=0;i<N;i++){
+    cin >> a >> b;
+    room.push_back({a,b});
+  }
+  sort(room.begin(), room.end(), cmp);
+  int start = room[0].first;
+  int end = room[0].second;
+  for(int i=1;i<N;i++){
+    if(end <= room[i].first){
+      start = room[i].first;
+      end = room[i].second;
+      res++;
     }
-    sort(vec.begin(), vec.end(), cmp);
-
-    end = vec[0].first;
-    for(int i=1;i<N;i++){
-        //cout << vec[i].first << " " << vec[i].second << endl;
-        if(vec[i].second >= end){
-            end = vec[i].first;
-            res++;
-        }
-    }
-    cout << res;
+  }
+  cout << res;
+   return 0;
 }
