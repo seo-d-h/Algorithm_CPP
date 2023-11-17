@@ -1,43 +1,41 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<vector>
+#include<algorithm>
 using namespace std;
+#define ll long long
+int main(int argc, char** argv)
+{
+  int N, res=0; 
+  ll num;
+  vector<ll> vec;
+  cin >> N;
+  for(int i=0;i<N;i++){
+    cin >> num;
+    vec.push_back(num);
+  }
+  sort(vec.begin(), vec.end());
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
-    int N, cnt=0;
-    vector<int> vec;
-    cin >> N;
-    vec.resize(N);
-    
-    for(int i=0;i<N;i++){
-        cin >> vec[i];
-    }
-
-    sort(vec.begin(), vec.end());
-    for(int i=0;i<N;i++){
-        long long cur = vec[i];
-        int l=0, r=N-1;
-        //cout << summa << endl;
-        while(l < r){
-            //cout << "cur : " << cur << ", l : " << l << " , r : " << r<<", summa : " << vec[l]+vec[r] << endl;
-            if(vec[l]+vec[r] == cur){
-                if(l != i && r != i){
-                    cnt++;
-                    break;
-                }
-                else if(l == i) l++;
-                else if(r == i) r--;
-            }
-            else if(vec[l]+vec[r] > cur){
-                r--;
-            }
-            else if(vec[l]+vec[r] < cur){
-                l++;
-            }
+  for(int i=0;i<N;i++){
+    ll cur = vec[i];
+    int l = 0, r = N-1;
+    while(l < r){
+      if(vec[l]+vec[r] == cur){
+        if(l != i && r != i){
+          res++;
+          break;
         }
+        if(l == i) l++;
+        if(r == i) r--;
+      }
+      else if(vec[l]+vec[r] > cur){
+        r--;
+      }
+      else if(vec[l]+vec[r] < cur){
+        l++;
+      }
     }
-    cout << cnt;
+  }
+  cout << res;
+  
+   return 0;
 }
