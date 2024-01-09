@@ -1,62 +1,62 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <memory.h>
-#include <limits.h>
 using namespace std;
 
-int V, E, K;
-typedef pair<int,int> edge;
-vector<vector<edge>> graph;
-bool visited[20002];
-int dist[20002];
+int V, E, start_node;
+int s, e, d;
+vector<pair<int, int>> board[20002];
+int dist[300002];
+priority_queue<pair<int,int>> PQ;
 
-void BFS(int start){
-    priority_queue<edge, vector<edge>, greater<edge>> Q;
-    Q.push({0,start});
-    dist[start] = 0;
-    while(!Q.empty()){
-        edge cur = Q.top(); Q.pop();
-        int cur_v = cur.second;
-        //cout << cur_v << endl;
-        if(visited[cur_v]) continue;
-        visited[cur_v] = true;
-        for(int i=0;i<graph[cur_v].size();i++){
-            edge tmp = graph[cur_v][i];
-            int next_v = tmp.first;
-            int tmp_w = tmp.second;
-            //cout << dist[next_v] << endl;
-            if(dist[next_v] > dist[cur_v]+tmp_w){
-                dist[next_v] = dist[cur_v]+tmp_w;
-                Q.push({dist[next_v], next_v});
+void Input(){
+    cin >> V >> E >> start_node;
+    for(int i=1;i<=E;i++){
+        cin >> s >> e >> d;
+        board[s].push_back({e,d});
+    }
+    for(int i=1;i<=V;i++){
+        dist[i] = 300001;       // 최대값 대입
+    }
+}
+
+void Output(){
+    // board 출력
+    // for(int i=0;i<E;i++){
+    //     cout << i << " : " << endl;
+    //     for(auto a : board[i]){
+    //         cout << a.first << " " << a.second << endl;
+    //     }
+    // }
+    for(int i=1;i<=V;i++){
+        if(dist[i] == 300001)   cout << "INF\n";
+        else    cout << dist[i] << "\n";
+    }
+}
+
+void Djikstra(int d, int start){
+    PQ.push({d, start});
+    dist[start] = d;
+    while(!PQ.empty()){
+        int next_dist = -PQ.top().first;
+        int cur_node = PQ.top().second;
+        //cout << cur_node << " " << next_dist << endl;
+        PQ.pop();
+        if(dist[cur_node] < next_dist) continue;
+        for(int i=0;i<board[cur_node].size();i++){
+            if(dist[board[cur_node][i].first] > dist[cur_node]+board[cur_node][i].second){
+                dist[board[cur_node][i].first] = dist[cur_node]+board[cur_node][i].second;
+                PQ.push({-dist[board[cur_node][i].first], board[cur_node][i].first});
             }
         }
     }
 }
 
 int main(){
-    int u,v,w;
-    cin >> V >> E >> K;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-    graph.resize(V+1);
-    // memset(dist, INT_MAX, sizeof(dist));
-    for(int i=1;i<=V;i++){
-        dist[i] = INT_MAX;
-    }
-
-    for(int i=0;i<E;i++){
-        cin >> u >> v >> w;
-        graph[u].push_back({v,w});
-    }
-    
-    BFS(K);
-
-    for(int i=1;i<=V;i++){
-        if(visited[i]){
-            cout << dist[i] << "\n";
-        }
-        else{
-            cout << "INF\n";
-        }
-    }
+    Input();
+    Djikstra(0, start_node);
+    Output();
 }
